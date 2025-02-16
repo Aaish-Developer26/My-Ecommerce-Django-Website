@@ -1,0 +1,9 @@
+# Ignore the virtual environment folder
+.venv/
+venv/
+
+# Ignore media files 
+media/
+
+# Ignore environment variables file
+.env
