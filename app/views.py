@@ -27,8 +27,8 @@ def add_to_cart(request):
 def buy_now(request):
  return render(request, 'app/buynow.html')
 
-def profile(request):
- return render(request, 'app/profile.html')
+# def profile(request):
+#  return render(request, 'app/profile.html')
 
 def address(request):
  return render(request, 'app/address.html')
@@ -36,8 +36,6 @@ def address(request):
 def orders(request):
  return render(request, 'app/orders.html')
 
-def change_password(request):
- return render(request, 'app/changepassword.html')
 
 def mobile(request,data=None):
  if data == None:
@@ -67,3 +65,5 @@ class CustomerRegisterationView(View):
  
 def checkout(request):
  return render(request, 'app/checkout.html')
+
+
