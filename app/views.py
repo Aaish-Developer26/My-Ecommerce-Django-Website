@@ -51,28 +51,85 @@ def show_cart(request):
     return render(request,'app/emptycart.html')
   
 
+
+
 def plus_cart(request):
- if request.method == 'GET':
-  prod_id = request.GET['prod_id']
-  print(prod_id)
-  c = Cart.objects.get(Q(product=prod_id)&Q(user=request.user))
-  c.quantity+=1
-  c.save()
-  amount = 0.0
-  shipping_amount = 70.0
-  cart_product = [p for p in Cart.objects.all() if p.user == request.user]
-  for p in cart_product:
-    tempamount = (p.quantity * p.product.discounted_price)
-    amount += tempamount
-    totalamount = amount + shipping_amount
-  data={
-    'quantity':c.quantity,
-    'amount':amount,
-    'totalamount':totalamount
-    }
-  return JsonResponse(data) 
+    if request.method == 'GET':
+        prod_id = request.GET.get('prod_id')  # Using .get() to avoid KeyError
+        
+        # Fetch all matching cart items for the user and product
+        cart_items = Cart.objects.filter(Q(product=prod_id) & Q(user=request.user))
+        
+        if cart_items.exists():  # Check if any item exists
+            c = cart_items.first()  # Pick the first cart entry
+            c.quantity += 1  # Increase the quantity
+            c.save()
 
+            # Recalculate cart total
+            amount = sum(p.quantity * p.product.discounted_price for p in Cart.objects.filter(user=request.user))
+            shipping_amount = 70.0
+            totalamount = amount + shipping_amount
 
+            data = {
+                'quantity': c.quantity,
+                'amount': amount,
+                'totalamount': totalamount
+            }
+            return JsonResponse(data)
+        
+        return JsonResponse({'error': 'Cart item not found'}, status=404)
+ 
+
+def minus_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET.get('prod_id')  # Using .get() to avoid KeyError
+        
+        # Fetch all matching cart items for the user and product
+        cart_items = Cart.objects.filter(Q(product=prod_id) & Q(user=request.user))
+        
+        if cart_items.exists():  # Check if any item exists
+            c = cart_items.first()  # Pick the first cart entry
+            c.quantity -= 1  # Increase the quantity
+            c.save()
+
+            # Recalculate cart total
+            amount = sum(p.quantity * p.product.discounted_price for p in Cart.objects.filter(user=request.user))
+            shipping_amount = 70.0
+            totalamount = amount + shipping_amount
+
+            data = {
+                'quantity': c.quantity,
+                'amount': amount,
+                'totalamount': totalamount
+            }
+            return JsonResponse(data)
+        
+        return JsonResponse({'error': 'Cart item not found'}, status=404)
+    
+
+def remove_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET.get('prod_id')  # Using .get() to avoid KeyError
+        
+        # Fetch all matching cart items for the user and product
+        cart_items = Cart.objects.filter(Q(product=prod_id) & Q(user=request.user))
+        
+        if cart_items.exists():  # Check if any item exists
+            c = cart_items.first()  # Pick the first cart entry
+            c.delete()
+
+            # Recalculate cart total
+            amount = sum(p.quantity * p.product.discounted_price for p in Cart.objects.filter(user=request.user))
+            shipping_amount = 70.0
+            totalamount = amount + shipping_amount
+
+            data = {
+                'amount': amount,
+                'totalamount': totalamount
+            }
+            return JsonResponse(data)
+        
+        return JsonResponse({'error': 'Cart item not found'}, status=404)
 
 def buy_now(request):
  return render(request, 'app/buynow.html')

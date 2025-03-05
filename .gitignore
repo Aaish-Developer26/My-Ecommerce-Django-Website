@@ -7,3 +7,5 @@ media/
 
 # Ignore environment variables file
 .env
+
+instructions.txt
