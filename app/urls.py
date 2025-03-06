@@ -20,6 +20,8 @@ urlpatterns = [
     path('orders/', views.orders, name='orders'),
     path('mobile/', views.mobile, name='mobile'),
     path('mobile/<slug:data>', views.mobile, name='mobiledata'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('paymentdone/', views.payment_done, name='paymentdone'),
     path('accounts/login/',auth_views.LoginView.as_view(template_name='app/login.html',authentication_form=LoginForm),name='login'),
     path('logout/',auth_views.LogoutView.as_view(next_page='login'),name='logout'),
     path('passwordchange/',auth_views.PasswordChangeView.as_view(template_name='app/passwordchange.html',form_class=MyPasswordChangeForm,success_url='/passwordchangedone/'),name='passwordchange'),
@@ -29,6 +31,5 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='app/password_reset_confirm.html',form_class=MySetPasswordForm),name='password_reset_confirm'),
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='app/password_reset_complete.html'),name='password_reset_complete'),
 
-    path('checkout/', views.checkout, name='checkout'),
     path('registration/',views.CustomerRegisterationView.as_view(),name="customerregistration")
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
