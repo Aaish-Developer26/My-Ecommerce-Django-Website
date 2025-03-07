@@ -142,7 +142,8 @@ def address(request):
  return render(request, 'app/address.html',{'add':add,'active':'btn-primary'})
 
 def orders(request):
- return render(request, 'app/orders.html')
+ op = OrderPlaced.objects.filter(user=request.user)
+ return render(request, 'app/orders.html',{'order_placed':op})
 
 
 def mobile(request,data=None):
